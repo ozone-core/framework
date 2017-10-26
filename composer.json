@@ -1,5 +1,5 @@
 {
-  "name": "ozone/core",
+  "name": "ozone-core/framework",
   "description": "Core Ozone Php Framework",
   "type": "project",
   "license": "MIT",
