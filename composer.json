@@ -35,7 +35,5 @@
     "psr-4": {
       "Ozone\\": "src\\ozone"
     }
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true
+  }
 }
