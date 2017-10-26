@@ -25,15 +25,18 @@
     "ozone/validate": "self.version",
     "ozone/encryption": "self.version",
     "ozone/hash": "self.version",
-    "ozone/pagination": "self.version"
-    "ozone/session": "self.version"
-    "ozone/token": "self.version"
-    "ozone/upload": "self.version"
+    "ozone/pagination": "self.version",
+    "ozone/session": "self.version",
+    "ozone/token": "self.version",
+    "ozone/upload": "self.version",
     "ozone/dirscan": "self.version"
   },
   "autoload": {
     "psr-4": {
       "Ozone\\": "src\\ozone"
     }
+  },
+  "config": {
+    "sort-packages": true
   }
 }
