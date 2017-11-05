@@ -1,8 +1,9 @@
 {
   "name": "ozone-core/framework",
   "description": "Core Ozone Php Framework",
-  "type": "library",
+  "type": "package",
   "license": "MIT",
+  "version": "5.0",
   "authors": [
     {
       "name": "Ozone",
@@ -10,26 +11,17 @@
     }
   ],
   "require": {
+    "danielstjules/stringy": "^3.1",
+    "doctrine/orm": "^2.5",
+    "ocramius/proxy-manager": "2.0.x-dev",
+    "php-di/slim-bridge": "^1.0",
+    "slim/flash": "^0.2.0",
     "slim/slim": "^3.0",
     "slim/twig-view": "^2.1",
-    "slim/flash": "^0.2.0",
-    "doctrine/orm": "^2.5",
     "symfony/console": "^3.3",
     "symfony/process": "^3.3",
-    "php-di/slim-bridge": "^1.0",
     "symfony/yaml": "2.*",
-    "vlucas/phpdotenv": "^2.4",
-    "danielstjules/stringy": "^3.1"
-  },
-  "replace": {
-    "ozone/validate": "self.version",
-    "ozone/encryption": "self.version",
-    "ozone/hash": "self.version",
-    "ozone/pagination": "self.version",
-    "ozone/session": "self.version",
-    "ozone/token": "self.version",
-    "ozone/upload": "self.version",
-    "ozone/dirscan": "self.version"
+    "vlucas/phpdotenv": "^2.4"
   },
   "autoload": {
     "psr-4": {
@@ -38,5 +30,6 @@
   },
   "config": {
     "sort-packages": true
-  }
+  },
+  "minimum-stability":"dev"
 }
