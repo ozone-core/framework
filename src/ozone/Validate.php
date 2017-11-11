@@ -120,7 +120,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function str($postVal, $postName, $rule = '')
+        public static function str($postVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($postVal);
@@ -129,14 +129,14 @@ namespace Ozone {
 
                 if (strlen($postVal) < 1 or empty($postVal)) {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
 
             if (!empty($postVal)) {
 
-                self::checkLength($postVal, $postName, $rules);
+                self::checkLength($postVal, $messageName, $rules);
 
             }// If Value Exists
         }
@@ -147,7 +147,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        private static function checkLength($postVal, $postName, $rules)
+        private static function checkLength($postVal, $messageName, $rules)
         {
             $value = [];
             foreach ($rules as $value) {
@@ -158,14 +158,14 @@ namespace Ozone {
 
                     if (strlen($postVal) < intval($res[1])) {
 
-                        self::setError($postName, $postName . " must be at least {$res[1]} character long.");
+                        self::setError($messageName, $messageName . " must be at least {$res[1]} character long.");
                     }
 
                 } elseif (preg_match("/^max:([0-9]*)$/", $value)) {
 
                     if (strlen($postVal) > intval($res[1])) {
 
-                        self::setError($postName, $postName . " must be less than {$res[1]} character long.");
+                        self::setError($messageName, $messageName . " must be less than {$res[1]} character long.");
                     }
                 }
 
@@ -241,7 +241,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function checkBox($cbVal, $postName, $rule = '')
+        public static function checkBox($cbVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($cbVal);
@@ -250,14 +250,14 @@ namespace Ozone {
 
                 if (count($cbVal) <= 0) {
 
-                    self::setError($postName, $postName . " is not checked");
+                    self::setError($messageName, $messageName . " is not checked");
 
                 }
             }
 
             if (!empty($postVal)) {
 
-                self::checkLength($postVal, $postName, $rules);
+                self::checkLength($postVal, $messageName, $rules);
 
             }// If Value Exists
         }
@@ -284,7 +284,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function email($postVal, $postName = "Email", $rule = '')
+        public static function email($postVal, $messageName = "Email", $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($postVal);
@@ -293,7 +293,7 @@ namespace Ozone {
 
                 if ($postVal == "") {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
@@ -304,11 +304,11 @@ namespace Ozone {
 
                 if (!preg_match('/^[^0-9][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[@][a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,4}$/', $postVal) AND !filter_var($postVal, FILTER_VALIDATE_EMAIL)) {
 
-                    self::setError($postName, $postName . " is not a valid email.");
+                    self::setError($messageName, $messageName . " is not a valid email.");
 
                 } elseif (checkdnsrr($domain) == FALSE) {
 
-                    self::setError($postName, $postName . " domain is not Valid");
+                    self::setError($messageName, $messageName . " domain is not Valid");
                 }
 
             }// If Value Exists
@@ -417,7 +417,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function url($urlVal, $postName, $rule = '')
+        public static function url($urlVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($urlVal);
@@ -426,7 +426,7 @@ namespace Ozone {
 
                 if (strlen($postVal) < 1 or empty($postVal)) {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
@@ -435,7 +435,7 @@ namespace Ozone {
 
                 if (!filter_var($urlVal, FILTER_VALIDATE_URL)) {
 
-                    self::setError($postName, $postName . " is not a valid URL address.");
+                    self::setError($messageName, $messageName . " is not a valid URL address.");
 
                 }
 
@@ -448,7 +448,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function alphaNum($anVal, $postName, $rule = '')
+        public static function alphaNum($anVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($anVal);
@@ -457,7 +457,7 @@ namespace Ozone {
 
                 if (strlen($postVal) < 1 or empty($postVal)) {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
@@ -466,11 +466,11 @@ namespace Ozone {
 
                 if (!preg_match('/^[a-z0-9][a-z0-9-]*[a-z0-9]$/i', $postVal)) {
 
-                    self::setError($postName, $postName . " is not a valid Alphanumeric value.");
+                    self::setError($messageName, $messageName . " is not a valid Alphanumeric value.");
 
                 } else {
 
-                    self::checkLength($postVal, $postName, $rules);
+                    self::checkLength($postVal, $messageName, $rules);
 
                 }
 
@@ -483,7 +483,7 @@ namespace Ozone {
          |--------------------------------------------
         */
 
-        public static function num($numVal, $postName, $rule = '')
+        public static function num($numVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($numVal);
@@ -492,7 +492,7 @@ namespace Ozone {
 
                 if (strlen($postVal) < 1 or empty($postVal)) {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
@@ -501,11 +501,11 @@ namespace Ozone {
 
                 if (!is_numeric($postVal)) {
 
-                    self::setError($postName, $postName . " is not a number.");
+                    self::setError($messageName, $messageName . " is not a number.");
 
                 } else {
 
-                    self::checkLength($postVal, $postName, $rules);
+                    self::checkLength($postVal, $messageName, $rules);
 
                 }
 
@@ -519,7 +519,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function char($charVal, $postName, $rule = '')
+        public static function char($charVal, $messageName, $rule = '')
         {
             $rules = explode('|', $rule);
             $postVal = trim($charVal);
@@ -528,7 +528,7 @@ namespace Ozone {
 
                 if (strlen($postVal) < 1 or empty($postVal)) {
 
-                    self::setError($postName, $postName . " is required.");
+                    self::setError($messageName, $messageName . " is required.");
 
                 }
             }
@@ -537,11 +537,11 @@ namespace Ozone {
 
                 if (preg_match('/[^a-zA-Z ]+/', $postVal)) {
 
-                    self::setError($postName, $postName . " is not a character.");
+                    self::setError($messageName, $messageName . " is not a character.");
 
                 } else {
 
-                    self::checkLength($postVal, $postName, $rules);
+                    self::checkLength($postVal, $messageName, $rules);
 
                 }
 
@@ -573,7 +573,7 @@ namespace Ozone {
         public static function rePopulate($value, $reset = false)
         {
 
-            return isset($reset) ? '' : self::setValue($value);
+            return (count(self::$errors) <1) ? '' : self::setValue($value);
         }
 
         /*
@@ -582,9 +582,9 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function setValue($postName)
+        public static function setValue($messageName)
         {
-            return isset($_REQUEST[$postName]) ? $_REQUEST[$postName] : '';
+            return isset($_REQUEST[$messageName]) ? $_REQUEST[$messageName] : '';
         }
 
         /*
