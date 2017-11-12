@@ -1,5 +1,8 @@
 <?php
+
 namespace Ozone {
+
+    use Slim\Http\UploadedFile;
 
     class Upload
     {
@@ -7,67 +10,44 @@ namespace Ozone {
         protected static $instance = null;
 
         // Upload Multiple And Single File
-        public static function move($file_input, $image_path)
+        public static function move($directory,$files,$rename)
         {
             //CREATE DIRECTORY IF NOT EXISTS
-            if (is_dir($image_path) == FALSE) {
-
-                $status = mkdir($image_path, 0744, TRUE);
-
+            if (is_dir($directory) == FALSE) {
+                $status = mkdir($directory, 0744, TRUE);
                 if ($status < 1) {
-
-                    throw New \Exception("Unable to make directory ['" . $image_path . "']. Please provide sufficient permission ");
+                    throw New \Exception("Unable to make directory ['" . $directory . "']. Please provide sufficient permission ");
                 }
             }
 
             //MULTIPLE FILE UPLOAD
-            if (is_array($file_input['tmp_name'])) {
-
-                foreach ($file_input['tmp_name'] as $key => $tmp_name) {
-
-                    $file_name = $file_input['name'][$key];
-                    $file_tmp_name = $file_input['tmp_name'][$key];
-                    $file_size = $file_input['size'][$key];
-
-                    if ($file_size > 0) {
-
-                        //RENAME WITH NEW DATE AND TIME
-                        $image = date('Y-m-d-h-i-s') . '-' . str_replace(' ', '_', $file_name);
-                        $path = $image_path . $image;
-                        move_uploaded_file($file_tmp_name, $path);
-                        $images[] = $image;
-
+            if (is_array($files)) {
+                $uploadedFiles = $files;
+                foreach ($uploadedFiles as $uploadedFile) {
+                    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                        $fileNames[] = self::handleUpload($directory, $uploadedFile,$rename);
                     }
-                }//FOREACH ENDS
+                }
 
             } else {
 
                 //SINGLE FILE UPLOAD
-                $file_name = $file_input['name'];
-                $file_tmp_name = $file_input['tmp_name'];
-                $file_size = $file_input['size'];
-
-                if ($file_size > 0) {
-
-                    //RENAME WITH NEW DATE AND TIME
-                    $images = date('Y-m-d-h-i-s') . '-' . str_replace(' ', '_', $file_name);
-                    $path = $image_path . $images;
-                    move_uploaded_file($file_tmp_name, $path);
-
+                $uploadedFile = $files;
+                if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+                    $fileNames = self::handleUpload($directory, $uploadedFile,$rename);
                 }
             }
-            return $images;
+            return $fileNames;
         }
 
-        // Check If File set or not
-        public static function isFileSet($fileInput)
+        public static function isFileSet(UploadedFile $files)
         {
             $res = false;
-            if (is_array($fileInput['tmp_name'])) {
+            if (is_array($files)) {
 
-                foreach ($fileInput['tmp_name'] as $key => $val) {
+                foreach ($files as $file) {
 
-                    $file_size = $fileInput['size'][$key];
+                    $file_size = $file->getSize();
 
                     if ($file_size > 0) {
 
@@ -80,7 +60,7 @@ namespace Ozone {
 
             } else {
 
-                if ($fileInput['size'] > 0) {
+                if ($files->getSize() > 0) {
 
                     $res = true;
                 } else {
@@ -90,12 +70,12 @@ namespace Ozone {
             return $res;
         }
 
-        // Unlink File
+        // Check If File set or not
+
         public static function unlink($filePath)
         {
 
             if (is_file($filePath)) {
-
                 unlink($filePath);
                 return true;
 
@@ -105,6 +85,8 @@ namespace Ozone {
 
         }
 
+        // Unlink File
+
         public static function instance()
         {
             if (!isset(self::$instance)) {
@@ -112,6 +94,18 @@ namespace Ozone {
             }
 
             return self::$instance;
+        }
+
+        public static function handleUpload($directory, UploadedFile $uploadedFile,$rename=TRUE)
+        {
+            $originalFileName = $uploadedFile->getClientFilename();
+            $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $basename = bin2hex(random_bytes(8)); // see http://php.net/manual/en/function.random-bytes.php
+            $filename = sprintf('%s.%0.8s', $basename, $extension);
+            $filename = ($rename)?$filename:$originalFileName;
+            $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
+
+            return $filename;
         }
 
     }

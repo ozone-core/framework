@@ -16,22 +16,21 @@ namespace Ozone {
           |
          */
 
-        public static function file($file, $dspName, $rule = '')
+        public static function file($files, $dspName, $rule = '')
         {
             $rules = explode('|', $rule);
-            if (is_array($file['tmp_name'])) {
+            if (is_array($files)) {
 
-                foreach ($file['tmp_name'] as $key => $tmp_name) {
+                foreach ($files as $file) {
 
-                    $file_name = $file['name'][$key];
+                    $file_name = $file->getClientFilename();
                     $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                    $file_size = $file['size'][$key];
+                    $file_size = $file->getSize();
 
                     //CHECK FILE SIZE
                     if (in_array('required', $rules)) {
 
                         if ($file_size <= 0) {
-
                             self::setError($dspName, $dspName . " is required.");
 
                         }
@@ -62,9 +61,9 @@ namespace Ozone {
                 }//FOREACH ENDS
             } else {
 
-                $file_name = $file['name'];
+                $file_name = $files->getClientFilename();
                 $ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-                $file_size = $file['size'];
+                $file_size = $files->getSize();
 
                 //CHECK FILE SIZE
                 if (in_array('required', $rules)) {
