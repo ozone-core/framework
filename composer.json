@@ -1,9 +1,7 @@
 {
   "name": "ozone-core/framework",
   "description": "Core Ozone Php Framework",
-  "type": "package",
   "license": "MIT",
-  "version": "5.1",
   "authors": [
     {
       "name": "Ozone",
