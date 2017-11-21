@@ -569,7 +569,7 @@ namespace Ozone {
           |--------------------------------------------
          */
 
-        public static function rePopulate($value, $reset = false)
+        public static function rePopulate($value)
         {
 
             return (count(self::$errors) <1) ? '' : self::setValue($value);
