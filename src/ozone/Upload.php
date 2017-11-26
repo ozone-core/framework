@@ -10,7 +10,7 @@ namespace Ozone {
         protected static $instance = null;
 
         // Upload Multiple And Single File
-        public static function move($directory,$files,$rename)
+        public static function move($directory,$files,$rename=true)
         {
             //CREATE DIRECTORY IF NOT EXISTS
             if (is_dir($directory) == FALSE) {
@@ -96,7 +96,7 @@ namespace Ozone {
             return self::$instance;
         }
 
-        public static function handleUpload($directory, UploadedFile $uploadedFile,$rename=TRUE)
+        public static function handleUpload($directory, UploadedFile $uploadedFile,$rename)
         {
             $originalFileName = $uploadedFile->getClientFilename();
             $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
