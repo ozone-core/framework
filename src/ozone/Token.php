@@ -11,52 +11,41 @@ namespace Ozone {
         public static function csrf()
         {
             Session::clear('formToken');
-            $token = self::_generateToken();
+            $token = self::generateToken();
             echo "<input name='" . self::FIELD_NAME . "' value='{$token}' type='hidden' />";
         }
 
-        public static function isValid($clear = true)
-        {
-            $valid = false;
-            $posted = isset($_REQUEST[self::FIELD_NAME]) ? $_REQUEST[self::FIELD_NAME] : '';
-            if (!empty($posted)) {
-                $posted = Encryption::decode($posted);
-                if (isset($_SESSION['formToken'][$posted])) {
-                    if ($_SESSION['formToken'][$posted] >= time() - 7200) {
-                        $valid = true;
-                    }
-                    if ($clear) {
-                        unset($_SESSION['formToken'][$posted]);
-                    }
-                }
-            }
-            return $valid;
-        }
-
-        protected static function _generateToken()
+        protected static function generateToken()
         {
             $time = time();
-            $token = Encryption::encode(sha1(mt_rand(0, 1000000)));
-            $_SESSION['formToken'][$token] = $time;
+            $secret = sha1(mt_rand(0, 1000000));
+            $token = Encryption::encode($secret);
+            $_SESSION['formToken'] = $token;
+            $_SESSION['formTokenExpires'] = $time;
             return $token;
+        }
+
+        public static function isValid()
+        {
+            $valid = false;
+            $postedToken = isset($_REQUEST[self::FIELD_NAME]) ? $_REQUEST[self::FIELD_NAME] : '';
+
+            if (!empty($postedToken) && isset($_SESSION['formToken'])) {
+
+                $postedToken = Encryption::decode($postedToken);
+                $formToken = Encryption::decode($_SESSION['formToken']);
+
+                // 10 Minute == 300 Seconds
+                if (isset($postedToken) && $formToken == $postedToken && $_SESSION['formTokenExpires'] >= time() - 300) {
+                    $valid = true;
+                    unset($_SESSION['formToken']);
+                    unset($_SESSION['formTokenExpires']);
+                }
+
+            }
+
+            return $valid;
         }
 
     }
 }
-
-/*
- USAGE
-<form action="process.php" method="post">
-    <label>What is your name? <input name="name" /></label>
-    <input type="submit" />
-    <?php echo Token::csrf() ?>
-</form>
-
-
-if (Token::isValid()) {
-
-}
-else {
- die('The form is not valid or has expired.');
-}
- */

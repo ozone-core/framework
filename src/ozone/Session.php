@@ -36,15 +36,6 @@ class Session extends Encryption
 
     }
 
-    public static function get($keyName)
-    {
-        if (sizeof($_SESSION) != NULL) {
-            return self::decode($_SESSION[$keyName]);
-        } else {
-            return false;
-        }
-    }
-
     public static function clear($sessionData)
     {
         if ($sessionData == '') {
@@ -77,5 +68,23 @@ class Session extends Encryption
         session_destroy();
 
         return true;
+    }
+
+    public function has($key)
+    {
+        if (self::get($key)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function get($keyName)
+    {
+        if (sizeof($_SESSION) != NULL) {
+            return self::decode($_SESSION[$keyName]);
+        } else {
+            return false;
+        }
     }
 }
