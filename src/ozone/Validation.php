@@ -28,6 +28,25 @@ namespace Ozone {
             return isset($_REQUEST[$fieldName]) ? $_REQUEST[$fieldName] : '';
         }
 
+
+        public static function errors()
+        {
+            $errors = [];
+            if (count(self::$errors) > 1) {
+
+                foreach (self::$errors as $key => $val) {
+                    $errors[] = [
+                        'field' => $key,
+                        'message' => $val,
+                    ];
+                }
+
+                return $errors;
+            }
+
+            return $errors;
+        }
+
         public static function errorList()
         {
             $errorsList = "<ol class=\"text-danger\">\n";
